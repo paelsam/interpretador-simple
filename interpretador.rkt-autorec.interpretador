@@ -124,7 +124,7 @@
       )
     ))
 
-; evaluar-expresión: 
+; evaluar-expresión: Exp x Amb ->
 
 (define evaluar-expresion
   (lambda (una-expresion un-ambiente)
@@ -276,18 +276,13 @@
 
 ;*****************************************************************************************************
 ;;* FUNCIONES AUXILIARES
+;* Creando función para buscar posición
 
-;buscar-posición: Simbolo x Lista -> Numero
-;Propósito: Encontrar el índice del primer símbolo que sea igual al identificador.
-;Devuelve #f si no se encuentra.
 (define buscar-posicion
   (lambda (identificador nombres-identificadores)
     (hallar-indice (lambda (symbolo) (eqv? symbolo identificador)) nombres-identificadores)
     ))
 
-;hallar-indice: Predicado x Lista -> Numero
-;Propósito: Encontrar el índice del primer elemento en lista que cumpla el predicado.
-;Si ningún elemento cumple con el predicado devuelve #f.
 (define hallar-indice
   (lambda (predicado lista)
     (cond
@@ -305,9 +300,6 @@
       )
     ))
 
-;evaluar-operadores: Lista x Ambiente -> Lista
-;Propósito: Evaluar cada operador en la lista dentro de un ambiente.
-; Devuelve una lista de resultados de la evaluación de cada operador en el ambiente dado.
 (define evaluar-operadores
   (lambda (operadores un-ambiente)
     (map (lambda (operador)
@@ -322,13 +314,12 @@
   // a)
  declarar-recursivamente([
   // divisionEntera: numero-lit x numero-lit -> numero-lit
-  // Propósito: Calcular la división entera de dos números
-  // Uso: evaluar @divisionEntera(10, 3) finEval => 3
-   
+  // propósito: Calcular la división entera de dos números
+  // uso: evaluar @divisionEntera(10, 3) finEval => 3
    @divisionEntera(@x, @y) = Si (@x < @y) { 0 } sino { (1 + evaluar @divisionEntera((@x ~ @y), @y) finEval) };
   // sumarDigitos: numero-lit -> numero-lit
-  // Propósito: Sumar los dígitos de un número
-  // Uso: evaluar @sumarDigitos(147) finEval => 12
+  // propósito: Sumar los dígitos de un número
+  // uso: evaluar @sumarDigitos(147) finEval => 12
    @sumarDigitos(@numero) = 
               Si (@numero == 0) { 0 } 
               sino { 
@@ -341,8 +332,8 @@
   // b)
   declarar-recursivamente ([
     // factorial: numero-lit -> numero-lit
-    // Propósito: Calcular el factorial de un número
-    // Uso: evaluar @factorial(5) finEval => 120
+    // propósito: Calcular el factorial de un número
+    // uso: evaluar @factorial(5) finEval => 120
    @factorial(@x)= Si (@x == 0) { 1 } sino { (@x * evaluar @factorial(sub1(@x)) finEval)};
   ]) { evaluar @factorial(5) finEval }
 
@@ -353,8 +344,8 @@
   // c)
   declarar-recursivamente([
     // potencia: numero-lit x numero-lit -> numero-lit
-    // Propósito: Calcular la potencia de un número
-    // Uso: evaluar @potencia(4, 2) finEval => 16
+    // propósito: Calcular la potencia de un número
+    // uso: evaluar @potencia(4, 2) finEval => 16
     @potencia(@base, @exponente) = 
      Si (@exponente == 0) { 
        1 
@@ -368,8 +359,8 @@
   // d)
   declarar-recursivamente([
     // sumaRango: numero-lit x numero-lit -> numero-lit
-    // Propósito: Calcular la suma de los números en un rango
-    // Uso: evaluar @sumaRango(2, 5) finEval => 14
+    // propósito: Calcular la suma de los números en un rango
+    // uso: evaluar @sumaRango(2, 5) finEval => 14
    @sumaRango(@a, @b) = 
      Si (@a == @b) { 
        @b 
@@ -381,41 +372,38 @@
   // e)
   declarar (
     // integrantes: -> texto.lit
-    // Propósito: Devolver el nombre de los integrantes del taller
-    // Uso: evaluar @integrantes() finEval => "Elkin_y_Leonardo_"
-    @integrantes = procedimiento () { "Elkin_y_Leonardo" };
-    
+    // propósito: Devolver el nombre de los integrantes del taller
+    // uso: evaluar @integrantes() finEval => "Elkin_y_Leonardo_"
+    @integrantes = procedimiento () { "Elkin_y_Leonardo" };  
     // saludar: procedimiento-exp -> texto.lit
-    // Propósito: Concatenar un saludo con el resultado de un procedimiento
-    // Uso: evaluar @saludar(@integrantes) finEval => "Hola: Elkin_y_Leonardo_"
+    // propósito: Concatenar un saludo con el resultado de un procedimiento
+    // uso: evaluar @saludar(@integrantes) finEval => "Hola: Elkin_y_Leonardo_"
     @saludar = procedimiento (@proc) { procedimiento () { ("Hola:_" concat evaluar @proc() finEval) } };
   ) {
   declarar(
     // decorate: -> texto.lit
-    // Propósito: Decorar un saludo
-    // Uso: evaluar @decorate() finEval => "Hola: Elkin_y_Leonardo_"
+    // propósito: Decorar un saludo
+    // uso: evaluar @decorate() finEval => "Hola: Elkin_y_Leonardo_"
     @decorate = evaluar @saludar(@integrantes) finEval;
   ) { evaluar @decorate() finEval } }
 
   // f)
   declarar (
     // integrantes: -> texto.lit
-    // Propósito: Devolver el nombre de los integrantes del taller
-    // Uso: evaluar @integrantes() finEval => "Elkin_y_Leonardo_"
-    @integrantes = procedimiento () { "Elkin_y_Leonardo_" };
-    
+    // propósito: Devolver el nombre de los integrantes del taller
+    // uso: evaluar @integrantes() finEval => "Elkin_y_Leonardo_"
+    @integrantes = procedimiento () { "Elkin_y_Leonardo_" };  
     // saludar: procedimiento-exp -> texto.lit
-    // Propósito: Concatenar un saludo con el resultado de un procedimiento
-    // Uso: evaluar @saludar(@integrantes) finEval => "Hola: Elkin_y_Leonardo_"
+    // propósito: Concatenar un saludo con el resultado de un procedimiento
+    // uso: evaluar @saludar(@integrantes) finEval => "Hola: Elkin_y_Leonardo_"
     @saludar = procedimiento (@proc) { procedimiento() { ("Hola:_" concat evaluar @proc() finEval) }};
   ) {
   declarar(
     // decorate: -> texto.lit -> texto.lit
-    // Propósito: Decorar un saludo con un texto adicional pasado como parámetro
-    // Uso: evaluar @decorate("EstudiantesFLP") finEval => "Hola: Elkin_y_Leonardo_EstudiantesFLP"
+    // propósito: Decorar un saludo con un texto adicional pasado como parámetro
+    // uso: evaluar @decorate("EstudiantesFLP") finEval => "Hola: Elkin_y_Leonardo_EstudiantesFLP"
     @decorate = procedimiento (@texto) { (evaluar evaluar @saludar(@integrantes) finEval () finEval concat @texto)  };
   ) { evaluar @decorate("EstudiantesFLP") finEval } }
 |#
 
-;Invocación al Interprete
 (interpretador)
